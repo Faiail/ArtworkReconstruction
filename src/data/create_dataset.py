@@ -7,10 +7,7 @@ from argparse import ArgumentParser
 
 
 def get_metadata_dataset(metadata_file_path, source_dir):
-
     metadata=pd.read_json(metadata_file_path).to_dict(orient='records')[:10]
-    #with open(metadata_file_path) as f:
-    #    metadata = json.load(f)
     source_imgs = os.listdir(source_dir)
     for ix, instance in tqdm(enumerate(metadata)):
         name = instance['artwork'].split('.')[0]
@@ -35,7 +32,6 @@ def get_caption_dataset(metadata_file_path, source_dir, captions_file_path, comb
             for x in metadata
         ]
     return metadata
-
 
 
 def parse_args():
