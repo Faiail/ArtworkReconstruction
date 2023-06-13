@@ -1,6 +1,7 @@
 from neo4j import GraphDatabase
 from argparse import ArgumentParser
 import json
+import pandas as pd
 
 
 def get_metadata(driver: GraphDatabase.driver, db: str, metadata: list) -> list:
@@ -33,8 +34,8 @@ def launch():
         {'var': 'g', 'class': 'genre'},
     ]
     data = get_metadata(driver, args.db, metadata)
-    with open(args.outpath, 'w+') as f:
-        json.dump(data, f)
+    data=pd.DataFrame(data)
+    data.to_json(args.outpath)
 
 
 if __name__ == '__main__':
