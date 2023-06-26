@@ -1,2 +1,4 @@
 *.json
 *.csv
+/src/models/test_images
+src/models/test_reconstructed.png
