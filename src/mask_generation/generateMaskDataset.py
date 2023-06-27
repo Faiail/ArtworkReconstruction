@@ -78,7 +78,7 @@ def generate_masks(src_images, indir, outdir):
             # Save the set of generated masks
             i = 1
             for mask in generated_masks:
-                mask.save(f"{artwork_name}_crop_mask{i}.png")
+                mask.save(f"{artwork_name}_crop_mask{i:03d}.png")
                 i += 1
 
         except KeyboardInterrupt:
@@ -98,8 +98,8 @@ if __name__ == '__main__':
 
     # Parsing necessary arguments for all mask generation operations
     aparser = argparse.ArgumentParser()
-    aparser.add_argument('indir', type=str, help='Path to folder with images')
-    aparser.add_argument('outdir', type=str, help='Path to folder to store masks to')
+    aparser.add_argument('--indir', type=str, help='Path to folder with images')
+    aparser.add_argument('--outdir', type=str, help='Path to folder to store masks to')
     aparser.add_argument('--n-jobs', type=int, default=0, help='How many processes to use')
     aparser.add_argument('--ext', type=str, default='jpg', help='Input image extension')
 

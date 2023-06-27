@@ -12,9 +12,9 @@ def get_metadata_dataset(metadata_file_path, source_dir):
     for ix, instance in tqdm(enumerate(metadata)):
         name = instance['artwork'].split('.')[0]
         references = list(filter(lambda x: x.startswith(name), source_imgs))
-        crops = list(filter(lambda x: re.match(f'{name}_crop\d\d\d.png', x) ,references))
-        masks = list(filter(lambda x: re.match(f'{name}_crop\d\d\d_mask\d\d\d.png', x) ,references))
-        metadata[ix]['crops'] = crops
+        crops = list(filter(lambda x: re.match(f'{name}_crop.png', x) ,references))[0]
+        masks = list(filter(lambda x: re.match(f'{name}_crop_mask\d\d\d.png', x) ,references))
+        metadata[ix]['crop'] = crops
         metadata[ix]['masks'] = masks
     return metadata
 
@@ -40,7 +40,7 @@ def parse_args():
     argparser.add_argument('--indir', type=str)
     argparser.add_argument('--outname', type=str)
     argparser.add_argument('--captionspath', type=str)
-    argparser.add_argument('--combined', type=bool)
+    argparser.add_argument('--combined', type=bool, default=True)
     return argparser.parse_args()
 
 
