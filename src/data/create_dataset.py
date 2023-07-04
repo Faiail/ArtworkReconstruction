@@ -3,6 +3,7 @@ import os
 import re
 import pandas as pd
 from tqdm import tqdm
+from urllib import parse
 from argparse import ArgumentParser
 
 
@@ -22,6 +23,7 @@ def get_metadata_dataset(metadata_file_path, source_dir):
 def get_caption_dataset(metadata_file_path, source_dir, captions_file_path, combined=False):
     metadata = get_metadata_dataset(metadata_file_path, source_dir)
     captions = pd.read_csv(captions_file_path)
+    captions['image'] = captions['image'].apply(lambda x: parse.quote(x, safe=':/'))
     captions.index = captions['image']
     captions.drop(['name', 'image', 'human'], axis=1)
     for ix, artwork in tqdm(enumerate(metadata)):
