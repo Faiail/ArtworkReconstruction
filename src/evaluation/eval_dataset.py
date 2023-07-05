@@ -5,6 +5,7 @@ import random
 from PIL import Image
 from diffusers import StableDiffusionInpaintPipeline
 
+
 class EvalDataset(Dataset):
     def __init__(self, root_dir, data, transform=None, seed=42):
         super().__init__()

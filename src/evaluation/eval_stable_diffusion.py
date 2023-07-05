@@ -34,7 +34,7 @@ def load_dataset(root_dir, dataset_path, bs=4, seed=42):
 
 
 def test(test_loader, pipeline, seed=42):
-    pipe.set_progress_bar_config(disable=True)
+    pipeline.set_progress_bar_config(disable=True)
     generator = torch.Generator('cuda').manual_seed(seed)
     fid = FrechetInceptionDistance(normalize=True)
     is_ = InceptionScore(normalize=True)
@@ -53,10 +53,24 @@ def test(test_loader, pipeline, seed=42):
     return mean.item(), std.item(), fid_val
 
 
-if __name__ == '__main__':
-    pipe = load_pipeline(model_id="runwayml/stable-diffusion-inpainting", device='cuda')
-    test_loader = load_dataset(root_dir='/ext/raffaele/images_inpainting',
-                               dataset_path='../data/splitted_data/test.json')
+def parse_args():
+    argument_parser = ArgumentParser()
+    argument_parser.add_argument('--pipe-name', help='name of the pretrained pipeline.',
+                                 default="runwayml/stable-diffusion-inpainting")
+    argument_parser.add_argument('--root-dir', help='folder in which the images are stored.',
+                                 required=True)
+    argument_parser.add_argument('--dataset-path', help='csv file in which are annotated all the captions.',
+                                 required=True)
+    argument_parser.add_argument('--batch-size', default=4)
+    argument_parser.add_argument('result-path', help='path to output json file.', required=True)
+    return argument_parser.parse_args()
+
+
+def main(args):
+    pipe = load_pipeline(model_id=args.pipe_name, device='cuda')
+    test_loader = load_dataset(root_dir=args.root_dir,
+                               dataset_path=args.dataset_path,
+                               bs=args.batch_size)
     (m, s, fid) = test(test_loader, pipe)
     results = {
         'is': {
@@ -65,5 +79,9 @@ if __name__ == '__main__':
         },
         'fid': fid
     }
-    with open('stable_diffusion_results.json', 'w+') as f:
+    with open(args.result_path, 'w+') as f:
         json.dump(results, f)
+
+
+if __name__ == '__main__':
+    main(parse_args())
