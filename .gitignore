@@ -2,4 +2,6 @@
 *.csv
 /src/models/test_images
 src/models/test_reconstructed.png
+/.idea
+*.pt*
 **/__pycache__/
